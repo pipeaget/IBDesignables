@@ -24,15 +24,14 @@ import UIKit
         }
     }
     
-    /// Used to specify the current FORButton state (active/unactive).
-    @IBInspectable var isActive: Bool = false {
+    @IBInspectable var isMultilineText: Bool = false {
         didSet {
             updateView()
         }
     }
     
-    /// Used to set a specific text into the component.
-    @IBInspectable var displayText: String = "Insert Text here" {
+    /// Used to specify the current FORButton state (active/unactive).
+    @IBInspectable var isActive: Bool = false {
         didSet {
             updateView()
         }
@@ -99,21 +98,26 @@ import UIKit
     //MARK: - FUNCTIONS
     
     override func draw(_ rect: CGRect) {
-        
         updateView()
+    }
+    
+    ///Used in order to make the text underlined.
+    func underlineText() {
+        self.titleLabel?.attributedText = NSAttributedString(
+            string: self.titleLabel?.text ?? "",
+            attributes: [.underlineStyle: NSUnderlineStyle.styleSingle.rawValue])
     }
     
     /// Used to update the FORButton attributes.
     func updateView(){
         
-        self.layer.cornerRadius = isRound ? self.frame.height/2 : borderCornerRadius
+        self.cornerRadius(cornerRadius: isRound ? nil : borderCornerRadius)
         self.backgroundColor = isActive ? activeBackgroundColor : unActiveBackgroundColor
         self.setTitleColor(isActive ? activeTextColor : unActiveTextColor,
-                           for: UIControl.State.normal)
+                           for: UIControlState.normal)
         self.layer.borderWidth = isActive ? activeBorderWidth : unActiveBorderWidth
         self.layer.borderColor = isActive ? activeBorderColor.cgColor : unActiveBorderColor.cgColor
         self.isUserInteractionEnabled = isActive
-        self.setTitle(displayText,
-                      for: UIControl.State.normal)
+        self.titleLabel!.numberOfLines = isMultilineText ? 0 : 1
     }
 }
